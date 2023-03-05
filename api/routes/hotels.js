@@ -13,7 +13,6 @@ router.post("/", verifyAdmin, createhotel)
 //get
 router.get("/find/:id", getidHotel)
 
-
 //update
 
 router.put("/:id", verifyAdmin, updatehotel)

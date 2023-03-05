@@ -15,7 +15,7 @@ export const register = async (req, res, next) => {
             img: req.body.img,
         })
         await newuser.save()
-        res.send({ status: "Dang ki thanh cong !" })
+        res.send({ status: "Đăng kí thành công !" })
     } catch (err) {
         next(err)
     }
@@ -23,23 +23,29 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
     try {
-        const User = await user.findOne({ username: req.body.username })
-        if (!User) return next(createError(404, "User not found !"))
+        const User = await user.findOne({ username: req.body.username });
+        if (!User) return next(createError(404, "User not found!"));
 
         const isPasswordCorrect = await bcrypt.compare(
             req.body.password,
             User.password
-        )
+        );
         if (!isPasswordCorrect)
-            return next(createError(400, "Password or User khong dung !"))
+            return next(createError(400, "Wrong password or username!"));
 
-        const token = jwt.sign({ id: User._id, isAdmin: user.isAdmin }, process.env.JWT)
-        const { password, isAdmin, ...otherDetails } = User._doc
-        res.cookie("access_token", token, {
-            httpOnly: true
-        }).status(200).json({ ...otherDetails })
+        const token = jwt.sign(
+            { id: User._id, isAdmin: User.isAdmin },
+            process.env.JWT
+        );
 
+        const { password, isAdmin, ...otherDetails } = User._doc;
+        res
+            .cookie("access_token", token, {
+                httpOnly: true,
+            })
+            .status(200)
+            .json({ details: { ...otherDetails }, isAdmin });
     } catch (err) {
-        next(err)
+        next(err);
     }
-}
+};

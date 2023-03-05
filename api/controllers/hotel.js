@@ -79,16 +79,13 @@ export const countbytype = async (req, res, next) => {
 export const getHotels = async (req, res, next) => {
 
 
-    //const lm = parseInt(req.query.lm)
     const { min, max, limit, ...others } = req.query
     try {
 
-        //console.log(lm);
         const hotels = await hotel.find({
             ...others,
-            cheapestPrice: { $gt: min | 1, $lt: max || 999 },
+            cheapestPrice: { $gt: min | 1, $lt: max || 500 },
         }).limit(limit)
-        //console.log(limit1);
         res.status(200).json(hotels)
     } catch (err) {
         next(err)
@@ -101,9 +98,9 @@ export const getHotelRooms = async (req, res, next) => {
         const Hotel = await hotel.findById(req.params.id)
         const list = await Promise.all(
             Hotel.rooms.map((room) => {
-                return Room.findById(room);
+                return Room.findById(room)
             })
-        );
+        )
         res.status(200).json(list)
     } catch (err) {
         next(err);

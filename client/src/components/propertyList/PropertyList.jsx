@@ -1,8 +1,8 @@
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../../components/hooks/useFectch";
 import "./propertyList.css";
 
 const PropertyList = () => {
-  const { data, loading, error } = useFetch("/hotels/countByType");
+  const { data, loading, error } = useFetch("http://localhost:8800/api/hotels/countbytype");
 
   const images = [
     "https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=",
@@ -18,7 +18,7 @@ const PropertyList = () => {
       ) : (
         <>
           {data &&
-            images.map((img,i) => (
+            images.map((img, i) => (
               <div className="pListItem" key={i}>
                 <img
                   src={img}

@@ -68,3 +68,18 @@ export const getallroom = async (req, res, next) => {
         next(err)
     }
 }
+
+export const updateRoomlibrary = async (req, res, next) => {
+    try {
+        await room.updateOne(
+            { "roomNumbers._id": req.params.id }
+            , {
+                $push: {
+                    "roomNumbers.$.unavailableDates": req.body.dates
+                },
+            })
+        res.status(200).json("Update thanh cong")
+    } catch (err) {
+        next(err)
+    }
+}
